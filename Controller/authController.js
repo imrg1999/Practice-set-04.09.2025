@@ -104,5 +104,25 @@ export const loginUser = async(req,res) => {
 }
 
 export const accessProfile = async(req,res) => {
-    
+    try{
+        const userProfile = await userModel.findById(req.user._id).select("-password");
+        if(!userProfile) {
+            return res.status(401).json({
+                success: false,
+                message: "Profile data wasn't found"
+            })
+        } else {
+            return res.status(200).json({
+                success: true,
+                data: {
+                    userProfile
+                }
+            })
+        }
+    } catch(error){
+        return res.status(500).json({
+                success: false,
+                message: "Internal Server Error"
+            })
+    }
 }
