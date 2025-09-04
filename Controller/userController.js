@@ -70,3 +70,32 @@ export const createnewUser = async(req,res) => {
         }
 }
 }
+
+export const updateUsers = async(req,res) => {
+    try{
+        const {id} = req.params;
+        const updateReqFormat = await zodValSchema.parseAsync(req.body);
+        if(updateReqFormat.password) {
+            updateReqFormat.password = await hashing(updateReqFormat.password);
+        }
+        const updateInfo = await userModel.findByIdAndUpdate(id,{
+            ...updateReqFormat,
+        },{new:true}).select("-password");
+        if(!updateInfo) {
+        return res.status(404).json({
+        success: false,
+        message: "Data Not Found"})
+        } else {
+         res.status(200).json({
+        success: true,
+        message: "Data updated successfully",
+        user: updateInfo
+         })
+        }
+    }catch (error) {
+        return res.status(500).json({
+        success: false,
+        message: "Internal Server Error"
+    })
+    }
+}
