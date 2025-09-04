@@ -123,3 +123,28 @@ export const deleteUser = async(req,res) => {
     })
     }
 }
+
+export const trackById = async(req,res) => {
+    try{
+        const {id} = req.params;
+        const trackId = await userModel.findById(id);
+        if(!trackId) {
+        return res.status(404).json({
+        success: false,
+        message: "user not found",
+    })
+    } else{
+     res.status(200).json({
+        success: true,
+        message: "User fetched successfully",
+        user: trackId
+    })
+    }
+    }catch (error) {
+        return res.status(500).json({
+        success: false,
+        message: "Internal Server Error",
+        error: error.message
+    })
+    }
+}
