@@ -102,3 +102,7 @@ export const loginUser = async(req,res) => {
         }
     }
 }
+
+export const accessProfile = async(req,res) => {
+    
+}
